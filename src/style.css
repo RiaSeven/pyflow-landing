@@ -13,3 +13,67 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* --- SYSTÈME DE BADGES & RANGS --- */
+
+/* 1. Animations */
+@keyframes eggWobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+@keyframes floatBig {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes floatSm {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* 2. Style de base de la pièce (Meme Coin) */
+.meme-coin {
+  background-color: #fbbf24; /* Amber-400 */
+  border: 3px solid #b45309; /* Amber-700 */
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+  border-radius: 50%;
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: inline-block;
+  flex-shrink: 0;
+  transition: all 0.5s ease;
+}
+
+/* 3. Images des Rangs */
+.rank-1 { background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/egg_1f95a.png'); }
+.rank-2 { 
+  background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/frog_1f438.png');
+  background-size: 75% !important; 
+}
+.rank-3 { background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/moai_1f5ff.png'); }
+.rank-4 { background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/crown_1f451.png'); }
+.rank-5 { 
+  background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/alien-monster_1f47e.png'); 
+  filter: drop-shadow(0 0 8px #d946ef); /* Glow violet pour l'alien */
+}
+
+/* 4. Animations conditionnelles */
+.meme-coin.rank-1 { animation: eggWobble 2s ease-in-out infinite; }
+.meme-coin:not(.rank-1) { animation: floatBig 3s ease-in-out infinite; }
+
+/* 5. Version Mini (Pour le Header) */
+.meme-coin-sm {
+  width: 32px;
+  height: 32px;
+  border-width: 2px;
+}
+.meme-coin-sm:not(.rank-1) { animation: floatSm 3s ease-in-out infinite; }
+
+/* 6. Version Large (Pour l'Accueil) */
+.meme-coin-lg {
+  width: 100px;
+  height: 100px;
+}

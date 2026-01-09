@@ -6,7 +6,7 @@ import AuthModal from './AuthModal.vue'; // On importe la modale
 
 const { user, logout } = useAuth();
 const { currentLevel, progressToNextLevel, allBadges } = useGame(); // Pour récupérer les infos de jeu
-
+const { userRank, solvedCount, totalExos } = useGame();
 const isModalOpen = ref(false);
 </script>
 
@@ -41,12 +41,13 @@ const isModalOpen = ref(false);
 
           <div class="flex flex-col items-end">
             <div class="flex items-center gap-2">
-              <span class="text-sm font-bold text-white">{{ user.displayName || user.email.split('@')[0] }}</span>
-              <span class="text-xs bg-blue-500/20 text-blue-300 px-1.5 rounded border border-blue-500/30">Niv. {{
-                currentLevel }}</span>
+              <span class="text-sm font-bold text-white">{{ user.displayName || userProfile?.pseudo }}</span>
+
+              <div class="meme-coin meme-coin-sm" :class="userRank.class" :title="userRank.name"></div>
             </div>
-            <div class="w-24 h-1 mt-1 overflow-hidden rounded-full bg-slate-800">
-              <div class="h-full bg-cyan-400" :style="{ width: progressToNextLevel + '%' }"></div>
+
+            <div class="mt-1 text-xs font-bold text-cyan-400">
+              XP: {{ solvedCount }}/{{ totalExos }}
             </div>
           </div>
 

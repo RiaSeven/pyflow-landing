@@ -25,31 +25,31 @@ const features = [
 </script>
 
 <template>
-  <section id="features" class="py-24 px-6">
-    <h2 class="text-5xl md:text-6xl font-black text-center mb-16">
-      <span class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">
-        Fonctionnalités Puissantes
+  <section id="features" class="px-6 py-24">
+    <h2 class="mb-16 text-5xl font-black text-center md:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
+        Devenez un Expert
       </span>
     </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 gap-6 mx-auto md:grid-cols-2 max-w-7xl">
       <div v-for="(feature, idx) in features" :key="idx"
         :class="['p-8 rounded-3xl backdrop-blur-xl bg-white/5 border border-white/10 transition-all duration-500 cursor-pointer group hover:bg-white/10 hover:scale-105 hover:shadow-[0_20px_60px_rgba(59,130,246,0.3)]', idx === 0 ? 'md:col-span-2' : '']">
 
         <div
-          class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:rotate-12 bg-gradient-to-br"
+          class="flex items-center justify-center w-16 h-16 mb-6 transition-transform duration-300 rounded-2xl group-hover:rotate-12 bg-gradient-to-br"
           :class="feature.iconColorClass">
           <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="text-white">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feature.path" />
           </svg>
         </div>
 
-        <h3 class="text-2xl font-bold mb-3 transition-colors duration-300 group-hover:text-cyan-400">
+        <h3 class="mb-3 text-2xl font-bold transition-colors duration-300 group-hover:text-cyan-400">
           {{ feature.title }}
         </h3>
         <p class="text-lg text-slate-400">{{ feature.desc }}</p>
 
-        <div class="mt-6 h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div class="h-1 mt-6 overflow-hidden rounded-full bg-slate-800">
           <div class="h-full w-0 transition-[width] duration-1000 ease-out group-hover:w-full bg-gradient-to-r"
             :class="feature.progressClass"></div>
         </div>

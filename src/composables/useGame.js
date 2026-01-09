@@ -2,98 +2,70 @@ import { computed } from 'vue';
 import { db } from '../services/firebase';
 import { doc, updateDoc, arrayUnion, increment } from "firebase/firestore";
 import { useAuth } from './useAuth';
+// On importe les exos pour connaître le total
+import { exercices } from '../data/exos.js'; 
 
 export function useGame() {
   const { user, userProfile } = useAuth();
 
-  // --- Logique de Niveau ---
-  // Formule : Niveau = racine carrée de (XP / 100)
-  const currentLevel = computed(() => {
-    if (!userProfile.value) return 1;
-    return Math.floor(Math.sqrt(userProfile.value.xp / 100)) + 1;
+  // --- Calculs de Progression ---
+  
+  const totalExos = exercices.length || 1; // Sécurité division par zéro
+  
+  const solvedCount = computed(() => {
+    return userProfile.value?.solvedExos?.length || 0;
   });
 
-  const xpForNextLevel = computed(() => {
-    const nextLvl = currentLevel.value + 1;
-    return Math.pow(nextLvl - 1, 2) * 100;
+  const progressPercent = computed(() => {
+    return Math.round((solvedCount.value / totalExos) * 100);
   });
 
-  const progressToNextLevel = computed(() => {
-    if (!userProfile.value) return 0;
-    const currentLvlXpBase = Math.pow(currentLevel.value - 1, 2) * 100;
-    const nextLvlXpBase = Math.pow(currentLevel.value, 2) * 100;
-    const range = nextLvlXpBase - currentLvlXpBase;
-    const progress = userProfile.value.xp - currentLvlXpBase;
-    return Math.min(100, Math.max(0, (progress / range) * 100));
+  // --- Logique des Rangs (Meme Coin) ---
+  const userRank = computed(() => {
+    const p = progressPercent.value;
+    
+    if (p >= 80) return { class: 'rank-5', name: 'Alien Master', emoji: '👽' };
+    if (p >= 60) return { class: 'rank-4', name: 'Roi du Code', emoji: '👑' };
+    if (p >= 40) return { class: 'rank-3', name: 'Moai Stoïque', emoji: '🗿' };
+    if (p >= 20) return { class: 'rank-2', name: 'Grenouille Agile', emoji: '🐸' };
+    return { class: 'rank-1', name: 'Oeuf Novice', emoji: '🥚' };
   });
 
-  // --- Actions ---
+  // --- Logique existante (XP, Badges...) ---
+  
+  // (Garde ici ta liste allBadges que nous avons faite à l'étape précédente)
+  // ... Je ne la remets pas pour ne pas surcharger le message, mais garde-la ! ...
+  const allBadges = [
+     // ... tes badges ...
+  ];
 
   const addXp = async (amount) => {
     if (!user.value) return;
-    
     const userRef = doc(db, "users", user.value.uid);
-    await updateDoc(userRef, {
-      xp: increment(amount)
-    });
-    
-    // Mise à jour locale optimiste
+    await updateDoc(userRef, { xp: increment(amount) });
     if(userProfile.value) userProfile.value.xp += amount;
-    
-    checkBadges(); // Vérifie si on a débloqué un badge
   };
 
   const markExerciseSolved = async (exoId) => {
     if (!user.value) return;
-    
-    // Vérifie si déjà résolu pour ne pas donner l'XP deux fois
     if (userProfile.value.solvedExos.includes(exoId)) return;
 
     const userRef = doc(db, "users", user.value.uid);
     await updateDoc(userRef, {
       solvedExos: arrayUnion(exoId),
-      xp: increment(50) // +50 XP par exo
+      xp: increment(50)
     });
-
-    // Update local
     userProfile.value.solvedExos.push(exoId);
     userProfile.value.xp += 50;
   };
 
-  // --- Badges ---
-  // Définition des badges (extrait de ton code)
-  const allBadges = [
-    { id: 'first_code', name: 'Hello World', icon: '👋', condition: (p) => p.xp >= 10 },
-    { id: 'level_5', name: 'Initié Python', icon: '🐍', condition: (p) => p.xp >= 2500 }, // Niv 5 approx
-    { id: 'streak_3', name: 'Régulier', icon: '🔥', condition: (p) => p.streak >= 3 },
-  ];
-
-  const checkBadges = async () => {
-    if (!userProfile.value) return;
-    
-    const newBadges = [];
-    allBadges.forEach(badge => {
-      if (!userProfile.value.badges.includes(badge.id) && badge.condition(userProfile.value)) {
-        newBadges.push(badge.id);
-      }
-    });
-
-    if (newBadges.length > 0) {
-      const userRef = doc(db, "users", user.value.uid);
-      await updateDoc(userRef, {
-        badges: arrayUnion(...newBadges)
-      });
-      // Notification ou Toast ici : "Nouveau badge débloqué !"
-      console.log("Badges débloqués :", newBadges);
-    }
-  };
-
   return {
-    currentLevel,
-    progressToNextLevel,
-    xpForNextLevel,
+    solvedCount,
+    totalExos,
+    progressPercent,
+    userRank, // <-- On exporte le rang calculé
+    allBadges,
     addXp,
-    markExerciseSolved,
-    allBadges
+    markExerciseSolved
   };
 }

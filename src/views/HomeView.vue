@@ -3,60 +3,78 @@ import HeroSection from '../components/HeroSection.vue';
 import CodeSection from '../components/CodeSection.vue';
 import FeaturesSection from '../components/FeaturesSection.vue';
 import CtaSection from '../components/CtaSection.vue';
+import Badge from '../components/Badge.vue';
 import { useAuth } from '../composables/useAuth';
 import { useGame } from '../composables/useGame';
 
 const { user, userProfile } = useAuth();
-const { currentLevel, progressToNextLevel, allBadges } = useGame();
+// On récupère TOUT : les infos de rang ET la liste des badges
+const { userRank, solvedCount, totalExos, progressPercent, allBadges } = useGame();
 </script>
 
 <template>
   <div>
     <section v-if="user && userProfile" class="px-6 pt-32 pb-12">
       <div class="mx-auto max-w-7xl">
-        <h2 class="mb-8 text-3xl font-bold">
+        <h2 class="mb-8 text-3xl font-bold font-display">
           Bonjour,
           <span class="text-cyan-400">
             {{ user.displayName || userProfile?.pseudo || user.email.split('@')[0] }}
           </span> 👋
         </h2>
+
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
           <div
-            class="relative p-6 overflow-hidden border rounded-3xl backdrop-blur-xl bg-slate-900/50 border-white/10 group">
+            class="p-6 rounded-3xl backdrop-blur-xl bg-slate-900/50 border border-white/10 relative overflow-hidden group flex flex-col justify-between min-h-[200px]">
             <div
-              class="absolute inset-0 transition-opacity opacity-0 bg-gradient-to-br from-blue-600/20 to-cyan-400/20 group-hover:opacity-100">
+              class="absolute top-0 right-0 p-32 bg-purple-500/20 rounded-full blur-[100px] group-hover:bg-purple-500/30 transition-all duration-1000">
             </div>
 
-            <div class="relative z-10 flex items-center justify-between mb-4">
-              <span class="text-sm font-bold uppercase text-slate-400">Niveau Actuel</span>
-              <span class="text-3xl font-black text-white">{{ currentLevel }}</span>
-            </div>
+            <div class="relative z-10 flex items-start justify-between mb-4">
+              <div>
+                <h3 class="text-xs font-bold tracking-widest uppercase text-slate-400">Progression Globale</h3>
+                <div class="flex items-baseline gap-2 mt-1">
+                  <span class="text-4xl text-white font-display">{{ solvedCount }}</span>
+                  <span class="font-mono text-sm text-slate-500">/ {{ totalExos }} exos</span>
+                </div>
 
-            <div class="w-full h-4 mb-2 overflow-hidden rounded-full bg-slate-800">
-              <div class="h-full transition-all duration-1000 bg-gradient-to-r from-blue-500 to-cyan-400"
-                :style="{ width: progressToNextLevel + '%' }"></div>
-            </div>
-            <div class="text-xs text-right text-slate-500">{{ Math.round(progressToNextLevel) }}% vers niveau {{
-              currentLevel + 1 }}</div>
-          </div>
-
-          <div class="p-6 border md:col-span-2 rounded-3xl backdrop-blur-xl bg-slate-900/50 border-white/10">
-            <h3 class="mb-4 text-sm font-bold uppercase text-slate-400">Derniers Badges</h3>
-            <div class="flex gap-4 pb-2 overflow-x-auto">
-              <div v-for="badge in allBadges" :key="badge.id"
-                class="relative flex items-center justify-center flex-shrink-0 w-16 h-16 text-2xl transition-all duration-300 border cursor-pointer rounded-2xl group"
-                :class="userProfile.badges && userProfile.badges.includes(badge.id)
-                  ? 'bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-purple-500/50 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]'
-                  : 'bg-white/5 border-white/5 text-slate-600 grayscale opacity-50'">
-
-                {{ badge.icon }}
-
-                <div
-                  class="absolute px-3 py-1 mb-2 text-xs transition-opacity -translate-x-1/2 border rounded-lg opacity-0 pointer-events-none bottom-full left-1/2 bg-black/90 whitespace-nowrap group-hover:opacity-100 border-white/10">
-                  {{ badge.name }}
+                <div class="mt-2 text-xs font-bold tracking-widest text-yellow-400 uppercase">
+                  {{ userRank.name }}
                 </div>
               </div>
+
+              <div class="meme-coin meme-coin-lg" :class="userRank.class"></div>
+            </div>
+
+            <div class="relative z-10">
+              <div class="relative w-full h-3 mb-2 overflow-hidden border rounded-full bg-white/5 border-white/5">
+                <div
+                  class="bg-gradient-to-r from-cyan-400 to-purple-500 h-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(34,211,238,0.5)]"
+                  :style="{ width: progressPercent + '%' }">
+                  <div class="absolute right-0 top-0 bottom-0 w-2 bg-white/50 blur-[2px]"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs font-bold tracking-widest uppercase">
+                <span class="text-slate-500">Avancement</span>
+                <span class="text-cyan-400">{{ progressPercent }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="md:col-span-2 p-8 rounded-3xl backdrop-blur-xl bg-slate-900/50 border border-white/10 flex flex-col justify-center min-h-[200px]">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-sm font-bold tracking-widest uppercase text-slate-400">Mes Trophées</h3>
+              <span class="px-3 py-1 font-mono text-xs border rounded-full text-slate-500 bg-white/5 border-white/5">
+                {{ userProfile.badges ? userProfile.badges.length : 0 }} / {{ allBadges.length }} débloqués
+              </span>
+            </div>
+
+            <div class="flex gap-6 px-2 pt-2 pb-4 overflow-x-auto scrollbar-hide">
+              <Badge v-for="badge in allBadges" :key="badge.id" :badge="badge"
+                :isUnlocked="userProfile.badges && userProfile.badges.includes(badge.id)" />
             </div>
           </div>
 
