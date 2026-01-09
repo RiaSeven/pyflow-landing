@@ -48,10 +48,12 @@ const features = [
         <div class="relative z-10 flex flex-col items-center gap-8 md:flex-row">
 
           <div class="flex-1 text-center md:text-left">
+
             <div
-              class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br from-blue-500 to-cyan-400 mx-auto md:mx-0 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+              class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br from-blue-500 to-cyan-400 mx-auto md:mx-0 shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-transform duration-300 group-hover:rotate-12">
               <span class="text-3xl">🏆</span>
             </div>
+
             <h3 class="mb-3 text-2xl font-bold text-white font-display">Système de Récompenses</h3>
             <p class="mb-4 text-lg text-slate-400">
               L'apprentissage ne doit pas être ennuyeux. Débloquez des trophées uniques en codant.

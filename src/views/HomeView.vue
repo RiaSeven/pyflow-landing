@@ -65,16 +65,18 @@ const { userRank, solvedCount, totalExos, progressPercent, allBadges } = useGame
 
           <div
             class="md:col-span-2 p-8 rounded-3xl backdrop-blur-xl bg-slate-900/50 border border-white/10 flex flex-col justify-center min-h-[200px]">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between mb-2">
               <h3 class="text-sm font-bold tracking-widest uppercase text-slate-400">Mes Trophées</h3>
               <span class="px-3 py-1 font-mono text-xs border rounded-full text-slate-500 bg-white/5 border-white/5">
                 {{ userProfile.badges ? userProfile.badges.length : 0 }} / {{ allBadges.length }} débloqués
               </span>
             </div>
 
-            <div class="flex gap-6 px-2 pt-2 pb-4 overflow-x-auto scrollbar-hide">
-              <Badge v-for="badge in allBadges" :key="badge.id" :badge="badge"
-                :isUnlocked="userProfile.badges && userProfile.badges.includes(badge.id)" />
+            <div class="flex gap-6 p-6 -mx-6 overflow-x-auto scrollbar-hide">
+              <div class="flex gap-6 px-2">
+                <Badge v-for="badge in allBadges" :key="badge.id" :badge="badge"
+                  :isUnlocked="userProfile.badges && userProfile.badges.includes(badge.id)" :showTooltip="false" />
+              </div>
             </div>
           </div>
 

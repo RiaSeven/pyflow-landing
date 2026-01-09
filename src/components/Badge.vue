@@ -1,7 +1,12 @@
 <script setup>
 defineProps({
   badge: Object,
-  isUnlocked: Boolean
+  isUnlocked: Boolean,
+  // Nouvelle option : True par défaut, mais on pourra mettre False
+  showTooltip: {
+    type: Boolean,
+    default: true
+  }
 });
 </script>
 
@@ -30,7 +35,6 @@ defineProps({
             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
       </div>
-
     </div>
 
     <span class="mt-3 text-xs font-bold tracking-wider uppercase transition-colors duration-300"
@@ -38,11 +42,10 @@ defineProps({
       {{ badge.name }}
     </span>
 
-    <div
+    <div v-if="showTooltip"
       class="absolute bottom-full mb-4 px-4 py-3 bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] rounded-xl text-xs text-slate-200 whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-all duration-300 translate-y-2 group-hover/badge:translate-y-0 pointer-events-none z-[100]">
       <div class="mb-1 font-bold text-center text-white">{{ badge.name }}</div>
       <div class="text-cyan-400">{{ badge.desc }}</div>
-
       <div class="absolute -translate-x-1/2 border-8 border-transparent top-full left-1/2 border-t-slate-900/80"></div>
     </div>
 
