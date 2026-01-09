@@ -14,8 +14,12 @@ const { currentLevel, progressToNextLevel, allBadges } = useGame();
   <div>
     <section v-if="user && userProfile" class="px-6 pt-32 pb-12">
       <div class="mx-auto max-w-7xl">
-        <h2 class="mb-8 text-3xl font-bold">Bonjour, <span class="text-cyan-400">{{ user.displayName }}</span> 👋</h2>
-
+        <h2 class="mb-8 text-3xl font-bold">
+          Bonjour,
+          <span class="text-cyan-400">
+            {{ user.displayName || userProfile?.pseudo || user.email.split('@')[0] }}
+          </span> 👋
+        </h2>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
           <div
