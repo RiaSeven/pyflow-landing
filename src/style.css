@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(135deg, #020617 0%, #1e3a8a 50%, #0f172a 100%);
+  color: white;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Scroll smooth global */
+html {
+  scroll-behavior: smooth;
+}
