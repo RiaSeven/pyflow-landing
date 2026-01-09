@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: '/pyflow-landing/',
   plugins: [vue()],
+  server: {
+    headers: {
+      // Cette ligne autorise les fenêtres pop-up à communiquer avec l'app
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    },
+  },
 })

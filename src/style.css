@@ -1,12 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: linear-gradient(135deg, #020617 0%, #1e3a8a 50%, #0f172a 100%);
-  color: white;
-  overflow-x: hidden;
-  min-height: 100vh;
+/* =========================================
+   1. LAYOUT GLOBAL & SCROLLBARS
+   ========================================= */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  /* CORRECTION : On enlève overflow:hidden pour permettre le scroll sur l'accueil */
+  /* overflow: hidden;  <-- SUPPRIMÉ */
+  font-family: 'Inter', sans-serif;
+
+  
+  
+  /* On applique le dégradé sur le body */
+  background: #020617; /* Couleur de secours */
+  background-image: linear-gradient(135deg, #020617 0%, #1e3a8a 50%, #0f172a 100%);
+  background-attachment: fixed; 
+  background-size: cover;
+  
+  color: #e2e8f0;
+  min-height: 100vh; /* Assure que le fond prend au moins toute la hauteur */
+}
+
+/* Forcer la police Archivo Black sur les titres pour l'impact visuel */
+h1, h2, .font-display {
+  font-family: 'Archivo Black', sans-serif !important;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar (Style VS Code) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155; /* slate-700 */
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569; /* slate-600 */
+}
+
+/* Variables de polices */
+:root {
+  --font-display: 'Archivo Black', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
 }
 
 /* Scroll smooth global */
@@ -14,9 +61,11 @@ html {
   scroll-behavior: smooth;
 }
 
-/* --- SYSTÈME DE BADGES & RANGS --- */
+/* =========================================
+   2. SYSTÈME DE BADGES & RANGS (ACCUEIL)
+   ========================================= */
 
-/* 1. Animations */
+/* Animations */
 @keyframes eggWobble {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-8deg); }
@@ -33,10 +82,10 @@ html {
   50% { transform: translateY(-3px); }
 }
 
-/* 2. Style de base de la pièce (Meme Coin) */
+/* Style de base de la pièce (Meme Coin) */
 .meme-coin {
-  background-color: #fbbf24; /* Amber-400 */
-  border: 3px solid #b45309; /* Amber-700 */
+  background-color: #fbbf24;
+  border: 3px solid #b45309;
   box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
   border-radius: 50%;
   background-size: 60%;
@@ -47,7 +96,7 @@ html {
   transition: all 0.5s ease;
 }
 
-/* 3. Images des Rangs */
+/* Images des Rangs */
 .rank-1 { background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/egg_1f95a.png'); }
 .rank-2 { 
   background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/frog_1f438.png');
@@ -57,14 +106,14 @@ html {
 .rank-4 { background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/crown_1f451.png'); }
 .rank-5 { 
   background-image: url('https://em-content.zobj.net/source/microsoft-teams/337/alien-monster_1f47e.png'); 
-  filter: drop-shadow(0 0 8px #d946ef); /* Glow violet pour l'alien */
+  filter: drop-shadow(0 0 8px #d946ef);
 }
 
-/* 4. Animations conditionnelles */
+/* Animations conditionnelles */
 .meme-coin.rank-1 { animation: eggWobble 2s ease-in-out infinite; }
 .meme-coin:not(.rank-1) { animation: floatBig 3s ease-in-out infinite; }
 
-/* 5. Version Mini (Pour le Header) */
+/* Tailles */
 .meme-coin-sm {
   width: 32px;
   height: 32px;
@@ -72,8 +121,103 @@ html {
 }
 .meme-coin-sm:not(.rank-1) { animation: floatSm 3s ease-in-out infinite; }
 
-/* 6. Version Large (Pour l'Accueil) */
 .meme-coin-lg {
   width: 100px;
   height: 100px;
+}
+
+/* =========================================
+   3. STYLE DU CONTENU DES COURS (HTML INJECTÉ)
+   ========================================= */
+
+.prose-custom {
+  color: #cbd5e1; /* text-slate-300 */
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+/* Le H1 des cours : on lui redonne sa puissance */
+.prose-custom h1, h1#course-content-title {
+  font-size: 3.5rem !important; /* Grosse taille comme l'original */
+  font-weight: 900 !important;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 2rem;
+  /* Optionnel : petit effet de lueur sur le titre */
+  text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+  text-transform: none;
+}
+
+.prose-custom h2 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 2rem;
+  color: white;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose-custom h3 {
+    @apply mt-8 mb-4 text-2xl font-bold text-cyan-400 font-display;
+}
+
+.prose-custom p {
+    @apply mb-4 text-lg leading-relaxed text-slate-300;
+}
+
+.prose-custom ul {
+    @apply mb-6 ml-4 space-y-2 list-disc list-inside text-slate-300;
+}
+
+.prose-custom li strong {
+    @apply text-white;
+}
+
+/* Blocs de code (Blocs <pre>) */
+.prose-custom pre {
+  background-color: #0d1117 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+/* Correction Highlight.js */
+.hljs {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Code inline (ex: `variable`) */
+.prose-custom :not(pre) > code {
+    @apply bg-slate-800 text-pink-400 px-1.5 py-0.5 rounded font-mono text-sm border border-white/10;
+}
+
+/* Note / Info Box */
+.prose-custom .info-box {
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 4px solid #3b82f6;
+  padding: 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 1.5rem 0;
+}
+
+.prose-custom img {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2rem auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Pour éviter que le cours soit trop noir :
+   On ajoute une légère lueur bleutée en fond de la zone main */
+main {
+  background: radial-gradient(circle at top right, rgba(30, 58, 138, 0.2), transparent);
+}
+
+/* Sidebar plus élégante et moins sombre */
+aside {
+  background-color: rgba(2, 6, 23, 0.5) !important;
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
